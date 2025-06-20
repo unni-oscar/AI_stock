@@ -7,8 +7,12 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3034/api/data')
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic ' + btoa('user:password'));
+
+    fetch('http://localhost:3034/api/data', { headers })
       .then((res) => {
+        if (res.status === 401) throw new Error('Authentication failed');
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
       })
