@@ -64,6 +64,10 @@ I want to develop a comprehensive web application for stock market analysis with
 - Set up basic authentication in the backend.
 
 ### Phase 5
-- Create Login page
-- Once logon , the user should be able to see Dashboard
+- Create Login page,
+- Once logon , the user should be able to see Dashboard 
+
+### Phase 6
+- registration page (email, password, name , dob) and be able to register
+
 
