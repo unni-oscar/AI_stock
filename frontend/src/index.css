@@ -5,9 +5,301 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f9fafb;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Basic styles for the sample page */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: #111827;
+}
+
+.user-menu {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 8px 16px;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-outline {
+  border: 1px solid #d1d5db;
+  color: #374151;
+  background: white;
+  padding: 8px 16px;
+}
+
+.btn-outline:hover {
+  background: #f9fafb;
+}
+
+.hero {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-bottom: 32px;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.stocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.stock-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  transition: box-shadow 0.2s;
+}
+
+.stock-card:hover {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.stock-symbol {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stock-name {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.stock-price {
+  text-align: right;
+}
+
+.price-value {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.price-change {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.price-change.positive {
+  color: #059669;
+}
+
+.price-change.negative {
+  color: #dc2626;
+}
+
+.stock-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  font-size: 0.875rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-weight: 500;
+  color: #111827;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.feature-item {
+  text-align: center;
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 1.5rem;
+}
+
+.feature-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.feature-description {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.blue-bg {
+  background: #dbeafe;
+}
+
+.green-bg {
+  background: #d1fae5;
+}
+
+.purple-bg {
+  background: #e9d5ff;
+}
+
+.blue-text {
+  color: #2563eb;
+}
+
+.green-text {
+  color: #059669;
+}
+
+.purple-text {
+  color: #7c3aed;
 }

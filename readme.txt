@@ -29,7 +29,7 @@ I want to develop a comprehensive web application for stock market analysis with
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS, Recharts
-- **Backend**: FastAPI, SQLAlchemy, PostgreSQL
+- **Backend**: Laravel, PostgreSQL
 - **Data Source**: NSE India (National Stock Exchange)
 - **Containerization**: Docker & Docker Compose
 - **Scheduling**: APScheduler for automated data fetching
@@ -45,16 +45,16 @@ I want to develop a comprehensive web application for stock market analysis with
 
 ### Phase 1 
 
-- Create folders for frontend and backend and make it in individual containers
-- setup react in the frontend 
+- Create folder for frontend for react with docker container
+- structure React application in a professional, managable, scalable, and maintainable and high level and modern folder structure ?
 - Create a sample page and run sample page on http://localhost:3033/
 
 ### Phase 2
 
-- Create FastAPI, SQLAlchemy, PostgreSQL in backend
+- create backend folder for Laravel with docker container
+- use PostgreSQL as db
 - frontend and backend communication should be only through api call- 
-- use Docker
-- run sample page on http://localhost:3033/
+- run sample backend page on http://localhost:3034/
 
 ### Phase 3
 
