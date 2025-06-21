@@ -1,54 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/layout/Header';
 import { APP_NAME } from '../utils/constants';
+import { useStocks, useMarketOverview, useHealthCheck } from '../hooks/useApi';
+import { Stock, MarketOverview } from '../services/api';
 
 const Home: React.FC = () => {
-  // Sample data for demonstration
-  const marketStats = [
-    { label: 'NIFTY 50', value: '22,419.95', change: '+0.85%', positive: true },
-    { label: 'SENSEX', value: '73,852.94', change: '+0.72%', positive: true },
-    { label: 'BANK NIFTY', value: '48,123.45', change: '-0.23%', positive: false },
-    { label: 'Market Cap', value: '₹3,456.78T', change: '+1.2%', positive: true },
-  ];
+  const { stocks, loading: stocksLoading, error: stocksError, fetchStocks } = useStocks();
+  const { marketOverview, loading: marketLoading, error: marketError, fetchMarketOverview } = useMarketOverview();
+  const { health, loading: healthLoading, error: healthError, checkHealth } = useHealthCheck();
+  const [apiStatus, setApiStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
 
-  const topStocks = [
-    {
-      symbol: 'RELIANCE',
-      name: 'Reliance Industries Ltd',
-      price: '₹2,456.78',
-      change: '+2.34%',
-      positive: true,
-      volume: '12.5M',
-      delivery: '78.5%',
-    },
-    {
-      symbol: 'TCS',
-      name: 'Tata Consultancy Services',
-      price: '₹3,789.12',
-      change: '+1.87%',
-      positive: true,
-      volume: '8.9M',
-      delivery: '82.3%',
-    },
-    {
-      symbol: 'HDFC BANK',
-      name: 'HDFC Bank Ltd',
-      price: '₹1,567.34',
-      change: '-0.45%',
-      positive: false,
-      volume: '15.2M',
-      delivery: '65.7%',
-    },
-    {
-      symbol: 'INFOSYS',
-      name: 'Infosys Ltd',
-      price: '₹1,234.56',
-      change: '+0.92%',
-      positive: true,
-      volume: '10.8M',
-      delivery: '71.2%',
-    },
-  ];
+  useEffect(() => {
+    // Check API health first
+    checkHealth()
+      .then(() => {
+        setApiStatus('connected');
+        // Fetch data if API is healthy
+        fetchStocks();
+        fetchMarketOverview();
+      })
+      .catch(() => {
+        setApiStatus('disconnected');
+      });
+  }, [checkHealth, fetchStocks, fetchMarketOverview]);
+
+  // Format market stats from API data
+  const getMarketStats = () => {
+    if (!marketOverview) return [];
+
+    return [
+      { 
+        label: 'NIFTY 50', 
+        value: marketOverview.nifty_50.value.toLocaleString('en-IN', { maximumFractionDigits: 2 }), 
+        change: `${marketOverview.nifty_50.change_percent >= 0 ? '+' : ''}${marketOverview.nifty_50.change_percent.toFixed(2)}%`, 
+        positive: marketOverview.nifty_50.change_percent >= 0 
+      },
+      { 
+        label: 'SENSEX', 
+        value: marketOverview.sensex.value.toLocaleString('en-IN', { maximumFractionDigits: 2 }), 
+        change: `${marketOverview.sensex.change_percent >= 0 ? '+' : ''}${marketOverview.sensex.change_percent.toFixed(2)}%`, 
+        positive: marketOverview.sensex.change_percent >= 0 
+      },
+      { 
+        label: 'BANK NIFTY', 
+        value: marketOverview.bank_nifty.value.toLocaleString('en-IN', { maximumFractionDigits: 2 }), 
+        change: `${marketOverview.bank_nifty.change_percent >= 0 ? '+' : ''}${marketOverview.bank_nifty.change_percent.toFixed(2)}%`, 
+        positive: marketOverview.bank_nifty.change_percent >= 0 
+      },
+      { 
+        label: 'Market Cap', 
+        value: `₹${(marketOverview.market_cap.value / 1e12).toFixed(2)}T`, 
+        change: `${marketOverview.market_cap.change_percent >= 0 ? '+' : ''}${marketOverview.market_cap.change_percent.toFixed(2)}%`, 
+        positive: marketOverview.market_cap.change_percent >= 0 
+      },
+    ];
+  };
+
+  // Format stocks from API data
+  const getTopStocks = () => {
+    if (!stocks) return [];
+
+    return stocks.map(stock => ({
+      symbol: stock.symbol,
+      name: stock.name,
+      price: `₹${stock.price.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`,
+      change: `${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%`,
+      positive: stock.change_percent >= 0,
+      volume: `${(stock.volume / 1e6).toFixed(1)}M`,
+      delivery: '75.0%', // This would come from API in future
+    }));
+  };
 
   const features = [
     {
@@ -74,9 +95,29 @@ const Home: React.FC = () => {
     },
   ];
 
+  const marketStats = getMarketStats();
+  const topStocks = getTopStocks();
+
   return (
     <div>
       <Header />
+      
+      {/* API Status Indicator */}
+      {apiStatus === 'checking' && (
+        <div className="api-status checking">
+          <div className="container">
+            <p>Connecting to API...</p>
+          </div>
+        </div>
+      )}
+      
+      {apiStatus === 'disconnected' && (
+        <div className="api-status disconnected">
+          <div className="container">
+            <p>⚠️ Unable to connect to backend API. Please ensure the backend is running on http://localhost:3034</p>
+          </div>
+        </div>
+      )}
       
       {/* Hero Section */}
       <section className="hero">
@@ -101,17 +142,23 @@ const Home: React.FC = () => {
       <section className="container" style={{ marginBottom: '48px' }}>
         <div className="card">
           <h2>Market Overview</h2>
-          <div className="stats-grid">
-            {marketStats.map((stat, index) => (
-              <div key={index} className="stat-item">
-                <div className="stat-value">{stat.value}</div>
-                <div className="stat-label">{stat.label}</div>
-                <div className={`price-change ${stat.positive ? 'positive' : 'negative'}`}>
-                  {stat.change}
+          {marketLoading ? (
+            <div className="loading">Loading market data...</div>
+          ) : marketError ? (
+            <div className="error">Error loading market data: {marketError}</div>
+          ) : (
+            <div className="stats-grid">
+              {marketStats.map((stat, index) => (
+                <div key={index} className="stat-item">
+                  <div className="stat-value">{stat.value}</div>
+                  <div className="stat-label">{stat.label}</div>
+                  <div className={`price-change ${stat.positive ? 'positive' : 'negative'}`}>
+                    {stat.change}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -119,34 +166,40 @@ const Home: React.FC = () => {
       <section className="container" style={{ marginBottom: '48px' }}>
         <div className="card">
           <h2>Top Performing Stocks</h2>
-          <div className="stocks-grid">
-            {topStocks.map((stock, index) => (
-              <div key={index} className="stock-card">
-                <div className="stock-header">
-                  <div>
-                    <div className="stock-symbol">{stock.symbol}</div>
-                    <div className="stock-name">{stock.name}</div>
+          {stocksLoading ? (
+            <div className="loading">Loading stock data...</div>
+          ) : stocksError ? (
+            <div className="error">Error loading stock data: {stocksError}</div>
+          ) : (
+            <div className="stocks-grid">
+              {topStocks.map((stock, index) => (
+                <div key={index} className="stock-card">
+                  <div className="stock-header">
+                    <div>
+                      <div className="stock-symbol">{stock.symbol}</div>
+                      <div className="stock-name">{stock.name}</div>
+                    </div>
+                    <div className="stock-price">
+                      <div className="price-value">{stock.price}</div>
+                      <div className={`price-change ${stock.positive ? 'positive' : 'negative'}`}>
+                        {stock.change}
+                      </div>
+                    </div>
                   </div>
-                  <div className="stock-price">
-                    <div className="price-value">{stock.price}</div>
-                    <div className={`price-change ${stock.positive ? 'positive' : 'negative'}`}>
-                      {stock.change}
+                  <div className="stock-details">
+                    <div className="detail-item">
+                      <span className="detail-label">Volume</span>
+                      <span className="detail-value">{stock.volume}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Delivery %</span>
+                      <span className="detail-value">{stock.delivery}</span>
                     </div>
                   </div>
                 </div>
-                <div className="stock-details">
-                  <div className="detail-item">
-                    <span className="detail-label">Volume</span>
-                    <span className="detail-value">{stock.volume}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Delivery %</span>
-                    <span className="detail-value">{stock.delivery}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

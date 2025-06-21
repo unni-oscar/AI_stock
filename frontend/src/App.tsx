@@ -1,12 +1,18 @@
 import React from 'react';
-import { Home } from './pages';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Home, ApiTest } from './pages';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/api-test" element={<ApiTest />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

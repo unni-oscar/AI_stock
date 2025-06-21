@@ -303,3 +303,38 @@ code {
 .purple-text {
   color: #7c3aed;
 }
+
+/* API Status Indicators */
+.api-status {
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+.api-status.checking {
+  background-color: #f0f8ff;
+  color: #0066cc;
+}
+
+.api-status.disconnected {
+  background-color: #fff5f5;
+  color: #dc2626;
+}
+
+/* Loading and Error States */
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  margin: 20px 0;
+}

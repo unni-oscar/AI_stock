@@ -16,6 +16,7 @@ const Header: React.FC = () => {
             <a href="/dashboard">Dashboard</a>
             <a href="/stocks">Stocks</a>
             <a href="/analysis">Analysis</a>
+            <a href="/api-test">API Test</a>
           </nav>
 
           {/* User Menu */}
